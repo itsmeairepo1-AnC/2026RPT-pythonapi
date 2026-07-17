@@ -1,0 +1,29 @@
+_schema-version: "3.1"
+ID: jit-risk-backend
+version: 1.0.0
+description: JIT Supply Chain Risk — Python backend API
+
+parameters:
+  enable-parallel-deployments: true
+
+modules:
+  # — Python API backend ————————————————————————————————————————————
+  - name: jit-risk-api
+    type: python
+    path: .
+    parameters:
+      buildpack: python_buildpack
+      memory: 512M
+      disk-quota: 1G
+      command: uvicorn main:app --host 0.0.0.0 --port $PORT
+    properties:
+      # AI Core credentials — set real values via:
+      #   cf set-env jit-risk-api <KEY> <VALUE>
+      # or bind an AI Core service instance.
+      AICORE_AUTH_URL: "SET_VIA_CF_ENV"
+      AICORE_CLIENT_ID: "SET_VIA_CF_ENV"
+      AICORE_CLIENT_SECRET: "SET_VIA_CF_ENV"
+      AICORE_BASE_URL: "SET_VIA_CF_ENV"
+      AICORE_RESOURCE_GROUP: "SET_VIA_CF_ENV"
+      RPT1_DEPLOYMENT_URL: "SET_VIA_CF_ENV"
+      ORCH_DEPLOYMENT_URL: "SET_VIA_CF_ENV"
