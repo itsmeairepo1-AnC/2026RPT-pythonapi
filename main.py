@@ -54,7 +54,7 @@ AICORE_CLIENT_ID = os.environ["AICORE_CLIENT_ID"]
 AICORE_CLIENT_SECRET = os.environ["AICORE_CLIENT_SECRET"]
 AICORE_BASE_URL = os.environ["AICORE_BASE_URL"]
 AICORE_RESOURCE_GROUP = os.environ["AICORE_RESOURCE_GROUP"]
-RPT1_DEPLOYMENT_URL = os.environ["RPT1_DEPLOYMENT_URL"]
+RPT_DEPLOYMENT_URL = os.environ["RPT_DEPLOYMENT_URL"]
 ORCH_DEPLOYMENT_URL = os.getenv("ORCH_DEPLOYMENT_URL", "")  # optional — enables LLM chat
 
 # Placeholder token — indicates URL has not been configured yet
@@ -115,7 +115,7 @@ def health():
     """Liveness + readiness check. Returns 200 when data and config are loaded."""
     return HealthResponse(
         status="ok",
-        model="sap-rpt-1-small",
+        model="sap-rpt-1.6",
         data_loaded="historical_df" in app_state,
     )
 
@@ -153,7 +153,7 @@ def predict(body: POPredictRequest):
     }
 
     try:
-        predicted_delay = call_rpt1(row_dict, historical_df, aicore, RPT1_DEPLOYMENT_URL)
+        predicted_delay = call_rpt1(row_dict, historical_df, aicore, RPT_DEPLOYMENT_URL)
     except RuntimeError as exc:
         raise HTTPException(502, detail=str(exc)) from exc
 
